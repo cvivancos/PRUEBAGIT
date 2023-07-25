@@ -61,3 +61,4 @@ Descargar Excel y leer columnas
 
 Cerrar navegador y formulario
     Close Window
+    Log    Se ha cerrado la ventana
