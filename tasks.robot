@@ -4,9 +4,12 @@ Library    RPA.Browser.Selenium    auto_close=${FALSE}
 Library    RPA.Excel.Files
 Library    RPA.HTTP
 Library    RPA.Desktop
+Library    RPA.Outlook.Application
+Library    RPA.Excel.Application
 
 *** Variables ***
 ${RUTA_EXCEL}=    ${CURDIR}${/}Datos.xlsx${/}
+${CORREO}=    juanfran1019@hotmail.com
 
 *** Tasks ***
 Robot prueba formulario google
@@ -41,8 +44,17 @@ Introducir cada fila al formulario
         Click Element   css:#i27 > div.vd3tt > div
     END
     Click Element    css:#mG61Hd > div.RH5hzf.RLS9Fe > div > div.ThHDze > div.DE3NNc.CekdCb > div.lRwqcd > div > span
+    
+    Enviar un correo electrónico de confirmación
 
     Volver a rellenar otro formulario
+
+Enviar un correo electrónico de confirmación
+    Export As Pdf    pdf_Filname=ListaPDF.pdf    excel_filename=Datos.xlsx
+    Send Message    recipients=${CORREO}    
+    ...            subject=CONFIRMACIÓN DE FORMULARIO ENVIADO
+    ...            body=Se ha enviado correctamente todos los campos del formulario de todos los trabajadores de Cenit.
+    ...            attachments=
 
 Volver a rellenar otro formulario
     Wait Until Element Is Visible    css:body > div.Uc2NEf > div:nth-child(2) > div.RH5hzf.RLS9Fe > div > div.vHW8K
@@ -50,7 +62,7 @@ Volver a rellenar otro formulario
     Log    Se va a rellenar otro formulario
 
 Descargar Excel y leer columnas
-    Open Workbook    ${RUTA_EXCEL}
+    RPA.Excel.Files.Open Workbook    ${RUTA_EXCEL}
     ${tabla}=    Read Worksheet As Table    header=${True}
     Close Workbook
 
