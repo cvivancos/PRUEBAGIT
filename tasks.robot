@@ -6,7 +6,7 @@ Library    RPA.HTTP
 Library    RPA.Desktop
 Library    RPA.Excel.Application
 Library    RPA.Word.Application
-Library    RPA.PDF
+Library    BuiltIn
 Library    RPA.Email.ImapSmtp    smtp_server=smtp.gmail.com    smtp_port=587
 Task Setup    Authorize    account=%{EMAIL}    password=%{PASSWORD}
 
