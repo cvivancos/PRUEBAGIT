@@ -2,6 +2,7 @@
 Documentation       Robot prueba formulario google
 Library    RPA.Browser.Selenium    auto_close=${FALSE}
 Library    RPA.Excel.Files
+Library    RPA.PDF
 Library    RPA.HTTP
 Library    RPA.Desktop
 Library    RPA.Excel.Application
@@ -12,6 +13,7 @@ Task Setup    Authorize    account=%{EMAIL}    password=%{PASSWORD}
 
 *** Variables ***
 ${RUTA_EXCEL}=    ${CURDIR}${/}Datos.xlsx${/}
+${CARPETA}=    ${CURDIR}${/}archivos${/}
 # ${CORREO}=    juanfran1019@hotmail.com
 
 *** Tasks ***
@@ -48,16 +50,19 @@ Introducir cada fila al formulario
     END
     Click Element    css:#mG61Hd > div.RH5hzf.RLS9Fe > div > div.ThHDze > div.DE3NNc.CekdCb > div.lRwqcd > div > span
     
-    Enviar un correo electrónico de confirmación    #${fila}
+    Enviar un correo electrónico de confirmación    ${fila}
 
     Volver a rellenar otro formulario
 
 Enviar un correo electrónico de confirmación
+    [Arguments]    ${fila}
+    ${contenido}    Set Variable    Nombre:${fila}[Nombre],${\n}${\n}Apellidos:${fila}[Apellidos],${\n}${\n}Edad:${fila}[Edad],${\n}${\n}Sexo:${fila}[Sexo],${\n}${\n}Dirección:${fila}[Dirección]
+    Html To Pdf    content=${contenido}    output_path=${CARPETA}trabador_${fila}[Nombre].pdf
     Send Message    sender=%{EMAIL}    
     ...    recipients=cvivancos@cenitcon.com
-    ...    subject=Prueba RPA Robocorp
-    ...    body=Esto es una prueba
-    ...    attachments=Datos.xlsx
+    ...    subject=FORMULARIO RELLENADO
+    ...    body=Buenos Días, ${fila}[Nombre] ${fila}[Apellidos]. Su formulario ha sido enviado con los datos mostrados en el PDF adjunto. Compruebe que son correctos y póngase en contacto con nosotros si no fuera así. Un saludo.
+    ...    attachments=${CARPETA}trabador_${fila}[Nombre].pdf
 
 Volver a rellenar otro formulario
     Wait Until Element Is Visible    css:body > div.Uc2NEf > div:nth-child(2) > div.RH5hzf.RLS9Fe > div > div.vHW8K
