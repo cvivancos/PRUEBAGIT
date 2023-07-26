@@ -6,6 +6,8 @@ Library    RPA.HTTP
 Library    RPA.Desktop
 Library    RPA.Outlook.Application
 Library    RPA.Excel.Application
+Library    RPA.Word.Application
+Library    RPA.PDF
 
 *** Variables ***
 ${RUTA_EXCEL}=    ${CURDIR}${/}Datos.xlsx${/}
@@ -45,16 +47,17 @@ Introducir cada fila al formulario
     END
     Click Element    css:#mG61Hd > div.RH5hzf.RLS9Fe > div > div.ThHDze > div.DE3NNc.CekdCb > div.lRwqcd > div > span
     
-    Enviar un correo electrónico de confirmación
+    Enviar un correo electrónico de confirmación    #${fila}
 
     Volver a rellenar otro formulario
 
 Enviar un correo electrónico de confirmación
-    Export As Pdf    pdf_Filname=ListaPDF.pdf    excel_filename=Datos.xlsx
-    Send Message    recipients=${CORREO}    
-    ...            subject=CONFIRMACIÓN DE FORMULARIO ENVIADO
-    ...            body=Se ha enviado correctamente todos los campos del formulario de todos los trabajadores de Cenit.
-    ...            attachments=
+    #[Arguments]    ${fila}
+    #Add Files To Pdf    files= ${fila}    Datos.pfd
+    Send Message    recipients= ${CORREO}    
+    ...            subject= CONFIRMACIÓN DE FORMULARIO ENVIADO
+    ...            body= Se ha enviado correctamente todos los campos del formulario de todos los trabajadores de Cenit.
+    #...            attachments=
 
 Volver a rellenar otro formulario
     Wait Until Element Is Visible    css:body > div.Uc2NEf > div:nth-child(2) > div.RH5hzf.RLS9Fe > div > div.vHW8K
