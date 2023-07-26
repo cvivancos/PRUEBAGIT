@@ -4,14 +4,15 @@ Library    RPA.Browser.Selenium    auto_close=${FALSE}
 Library    RPA.Excel.Files
 Library    RPA.HTTP
 Library    RPA.Desktop
-Library    RPA.Outlook.Application
 Library    RPA.Excel.Application
 Library    RPA.Word.Application
 Library    RPA.PDF
+Library    RPA.Email.ImapSmtp    smtp_server=smtp.gmail.com    smtp_port=587
+Task Setup    Authorize    account=%{EMAIL}    password=%{PASSWORD}
 
 *** Variables ***
 ${RUTA_EXCEL}=    ${CURDIR}${/}Datos.xlsx${/}
-${CORREO}=    juanfran1019@hotmail.com
+# ${CORREO}=    juanfran1019@hotmail.com
 
 *** Tasks ***
 Robot prueba formulario google
@@ -52,12 +53,11 @@ Introducir cada fila al formulario
     Volver a rellenar otro formulario
 
 Enviar un correo electrónico de confirmación
-    #[Arguments]    ${fila}
-    #Add Files To Pdf    files= ${fila}    Datos.pfd
-    Send Message    recipients= ${CORREO}    
-    ...            subject= CONFIRMACIÓN DE FORMULARIO ENVIADO
-    ...            body= Se ha enviado correctamente todos los campos del formulario de todos los trabajadores de Cenit.
-    #...            attachments=
+    Send Message    sender=%{EMAIL}    
+    ...    recipients=cvivancos@cenitcon.com
+    ...    subject=Prueba RPA Robocorp
+    ...    body=Esto es una prueba
+    ...    attachments=Datos.xlsx
 
 Volver a rellenar otro formulario
     Wait Until Element Is Visible    css:body > div.Uc2NEf > div:nth-child(2) > div.RH5hzf.RLS9Fe > div > div.vHW8K
